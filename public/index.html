@@ -4,9 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arhiva Campus UAIC</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        .locatie { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #f9f9f9; }
+        .nume { font-size: 18px; font-weight: bold; color: #0056b3; }
+        .detalii { color: #555; font-size: 14px; margin-top: 5px; }
+    </style>
 </head>
 <body>
-    <h1>Bine ai venit pe platforma Arhiva Campus UAIC!</h1>
-    <p>Aici vei găsi materiale pentru facultate, recomandări de locații și prețuri din campus.</p>
+    <h1>Platforma Arhiva Campus UAIC</h1>
+    <p>Top locații și cantine recomandate:</p>
+    
+    <div id="lista-locatii">Se încarcă datele...</div>
+
+    <script>
+        async function incarcaLocatii() {
+            try {
+                // Facem o cerere către propria noastră rută API
+                const response = await fetch('/api/locatii');
+                const locatii = await response.json();
+                
+                const container = document.getElementById('lista-locatii');
+                container.innerHTML = ''; // Curățăm textul de încărcare
+
+                // Parcurgem fiecare locație și o adăugăm pe pagină
+                locatii.forEach(locatie => {
+                    const div = document.createElement('div');
+                    div.className = 'locatie';
+                    div.innerHTML = `
+                        <div class="nume">${locatie.nume}</div>
+                        <div class="detalii">Categorie: ${locatie.categorie} | Scor: ${locatie.scor}/10</div>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                document.getElementById('lista-locatii').innerText = 'Eroare la conectarea cu baza de date.';
+            }
+        }
+
+        // Apelăm funcția când se deschide pagina
+        incarcaLocatii();
+    </script>
 </body>
 </html>
