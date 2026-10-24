@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arhiva Materiale - UAIC</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; max-width: 800px; margin: auto; background-color: #f8f9fa; }
+        .material { border: none; padding: 20px; margin-bottom: 15px; border-radius: 10px; background-color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .detalii h3 { margin: 0 0 5px 0; color: #2c3e50; }
+        .detalii p { margin: 0; color: #7f8c8d; font-size: 14px; }
+        .buton-descarca { background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s; }
+        .buton-descarca:hover { background-color: #219150; }
+        a.inapoi { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #3498db; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <a href="/" class="inapoi">← Înapoi la Meniu</a>
+    <h1>📚 Arhiva Materiale</h1>
+    
+    <div id="lista-materiale">Se încarcă datele...</div>
+
+    <script>
+        async function incarcaMateriale() {
+            try {
+                const response = await fetch('/api/materiale');
+                const materiale = await response.json();
+                
+                const container = document.getElementById('lista-materiale');
+                container.innerHTML = ''; 
+
+                materiale.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'material';
+                    div.innerHTML = `
+                        <div class="detalii">
+                            <h3>${item.titlu}</h3>
+                            <p>Materia: ${item.materia} | Anul: ${item.anul}</p>
+                        </div>
+                        <a href="${item.link_fisier}" target="_blank" class="buton-descarca">Deschide PDF</a>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                document.getElementById('lista-materiale').innerText = 'Eroare la încărcare.';
+            }
+        }
+        incarcaMateriale();
+    </script>
+</body>
+</html>
