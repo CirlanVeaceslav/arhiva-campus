@@ -2,6 +2,12 @@ const express = require('express');
 const { Pool } = require('pg');
 
 const app = express();
+
+// Îi spunem serverului să folosească folderul public pentru fișiere statice (HTML)
+app.use(express.static('public')); 
+
+// ... restul codului rămâne neschimbat ...
+
 // Render va aloca automat un port, altfel folosim 3000 pentru testare locală
 const port = process.env.PORT || 3000; 
 
