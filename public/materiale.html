@@ -6,46 +6,122 @@
     <title>Arhiva Materiale - UAIC</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; max-width: 800px; margin: auto; background-color: #f8f9fa; }
-        .material { border: none; padding: 20px; margin-bottom: 15px; border-radius: 10px; background-color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        h1 { color: #1a2b4c; }
+        .inapoi { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #3498db; font-weight: bold; }
+        
+        /* Stiluri pentru zona de filtrare */
+        .filtre-container { background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .grup-filtru { display: flex; flex-direction: column; flex: 1; min-width: 200px; }
+        .grup-filtru label { font-size: 14px; font-weight: bold; color: #4a5568; margin-bottom: 5px; }
+        .grup-filtru select { padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 15px; outline: none; cursor: pointer; }
+        
+        /* Stiluri pentru lista de materiale */
+        .material { border: none; padding: 20px; margin-bottom: 15px; border-radius: 10px; background-color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .material:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
         .detalii h3 { margin: 0 0 5px 0; color: #2c3e50; }
         .detalii p { margin: 0; color: #7f8c8d; font-size: 14px; }
-        .buton-descarca { background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s; }
+        .buton-descarca { background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s; white-space: nowrap; margin-left: 15px; }
         .buton-descarca:hover { background-color: #219150; }
-        a.inapoi { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #3498db; font-weight: bold; }
+        .mesaj-gol { text-align: center; color: #7f8c8d; padding: 20px; font-style: italic; }
     </style>
 </head>
 <body>
     <a href="/" class="inapoi">← Înapoi la Meniu</a>
     <h1>📚 Arhiva Materiale</h1>
     
+    <div class="filtre-container">
+        <div class="grup-filtru">
+            <label for="filtru-an">Filtrează după Anul de studiu:</label>
+            <select id="filtru-an">
+                <option value="toate">Toți anii</option>
+            </select>
+        </div>
+        <div class="grup-filtru">
+            <label for="filtru-materie">Filtrează după Materie:</label>
+            <select id="filtru-materie">
+                <option value="toate">Toate materiile</option>
+            </select>
+        </div>
+    </div>
+
     <div id="lista-materiale">Se încarcă datele...</div>
 
     <script>
-        async function incarcaMateriale() {
+        let toateMaterialele = []; // Aici vom păstra toate datele descărcate inițial
+
+        async function incarcaDate() {
             try {
                 const response = await fetch('/api/materiale');
-                const materiale = await response.json();
+                toateMaterialele = await response.json();
                 
-                const container = document.getElementById('lista-materiale');
-                container.innerHTML = ''; 
-
-                materiale.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'material';
-                    div.innerHTML = `
-                        <div class="detalii">
-                            <h3>${item.titlu}</h3>
-                            <p>Materia: ${item.materia} | Anul: ${item.anul}</p>
-                        </div>
-                        <a href="${item.link_fisier}" target="_blank" class="buton-descarca">Deschide PDF</a>
-                    `;
-                    container.appendChild(div);
-                });
+                populeazaFiltre(toateMaterialele);
+                afiseazaMateriale(toateMaterialele);
             } catch (error) {
-                document.getElementById('lista-materiale').innerText = 'Eroare la încărcare.';
+                document.getElementById('lista-materiale').innerText = 'Eroare la încărcarea arhivei din baza de date.';
             }
         }
-        incarcaMateriale();
+
+        function populeazaFiltre(materiale) {
+            const selectAn = document.getElementById('filtru-an');
+            const selectMaterie = document.getElementById('filtru-materie');
+
+            // Extragem valori unice pentru ani și materii
+            const aniUnici = [...new Set(materiale.map(m => m.anul))].sort();
+            const materiiUnice = [...new Set(materiale.map(m => m.materia))].sort();
+
+            // Adăugăm opțiunile în HTML
+            aniUnici.forEach(an => {
+                if(an) selectAn.innerHTML += `<option value="${an}">Anul ${an}</option>`;
+            });
+
+            materiiUnice.forEach(materie => {
+                if(materie) selectMaterie.innerHTML += `<option value="${materie}">${materie}</option>`;
+            });
+
+            // Adăugăm evenimentele de schimbare pentru a filtra lista automat
+            selectAn.addEventListener('change', aplicaFiltre);
+            selectMaterie.addEventListener('change', aplicaFiltre);
+        }
+
+        function aplicaFiltre() {
+            const anSelectat = document.getElementById('filtru-an').value;
+            const materieSelectata = document.getElementById('filtru-materie').value;
+
+            // Filtrăm lista pe baza selecțiilor
+            const materialeFiltrate = toateMaterialele.filter(item => {
+                const respectaAnul = (anSelectat === 'toate') || (item.anul.toString() === anSelectat);
+                const respectaMateria = (materieSelectata === 'toate') || (item.materia === materieSelectata);
+                return respectaAnul && respectaMateria;
+            });
+
+            afiseazaMateriale(materialeFiltrate);
+        }
+
+        function afiseazaMateriale(materiale) {
+            const container = document.getElementById('lista-materiale');
+            container.innerHTML = ''; 
+
+            if (materiale.length === 0) {
+                container.innerHTML = '<div class="mesaj-gol">Nu am găsit niciun material pentru filtrele selectate.</div>';
+                return;
+            }
+
+            materiale.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'material';
+                div.innerHTML = `
+                    <div class="detalii">
+                        <h3>${item.titlu}</h3>
+                        <p>Materia: <strong>${item.materia}</strong> | Anul: ${item.anul}</p>
+                    </div>
+                    <a href="${item.link_fisier}" target="_blank" class="buton-descarca">Deschide PDF</a>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Inițializăm scriptul la deschiderea paginii
+        incarcaDate();
     </script>
 </body>
 </html>
