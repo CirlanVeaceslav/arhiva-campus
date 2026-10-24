@@ -1,14 +1,28 @@
 const express = require('express');
-const app = express();
-const port = 3000;
+const { Pool } = require('pg');
 
-// Aceasta este o rută de test. 
-// Când cineva intră pe site-ul tău, va primi acest mesaj.
-app.get('/', (req, res) => {
-  res.send('Salut! Serverul pentru arhiva UAIC funcționează perfect.');
+const app = express();
+// Render va aloca automat un port, altfel folosim 3000 pentru testare locală
+const port = process.env.PORT || 3000; 
+
+// Configurarea conexiunii la baza de date folosind variabila din Render
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // Setare obligatorie pentru conexiunile externe în cloud
 });
 
-// Pornim serverul și îl punem să asculte pe portul 3000
+app.get('/', async (req, res) => {
+  try {
+    // Testăm conexiunea interogând baza de date
+    const client = await pool.connect();
+    res.send('Salut! Serverul pentru arhiva UAIC funcționează și este CONECTAT la baza de date Supabase!');
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.send('Serverul funcționează, dar există o eroare la conectarea cu baza de date. Verifică parola din Render.');
+  }
+});
+
 app.listen(port, () => {
-  console.log(`Serverul rulează la adresa http://localhost:${port}`);
+  console.log(`Serverul rulează pe portul ${port}`);
 });
