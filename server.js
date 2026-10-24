@@ -17,15 +17,17 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false } // Setare obligatorie pentru conexiunile externe în cloud
 });
 
-app.get('/', async (req, res) => {
+// Rută API pentru a obține locațiile din baza de date
+app.get('/api/locatii', async (req, res) => {
   try {
-    // Testăm conexiunea interogând baza de date
     const client = await pool.connect();
-    res.send('Salut! Serverul pentru arhiva UAIC funcționează și este CONECTAT la baza de date Supabase!');
+    // Extragem toate locațiile, ordonate după scor (cele mai bune primele)
+    const result = await client.query('SELECT * FROM locatii ORDER BY scor DESC');
+    res.json(result.rows);
     client.release();
   } catch (err) {
     console.error(err);
-    res.send('Serverul funcționează, dar există o eroare la conectarea cu baza de date. Verifică parola din Render.');
+    res.status(500).send('Eroare la preluarea locațiilor din baza de date.');
   }
 });
 
