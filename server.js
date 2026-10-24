@@ -30,6 +30,19 @@ app.get('/api/locatii', async (req, res) => {
     res.status(500).send('Eroare la preluarea locațiilor din baza de date.');
   }
 });
+// Rută API pentru a obține materialele din baza de date
+app.get('/api/materiale', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    // Extragem toate materialele
+    const result = await client.query('SELECT * FROM materiale ORDER BY anul ASC');
+    res.json(result.rows);
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Eroare la preluarea materialelor.');
+  }
+});
 
 app.listen(port, () => {
   console.log(`Serverul rulează pe portul ${port}`);
