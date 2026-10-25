@@ -4,6 +4,14 @@ const { Pool } = require('pg');
 const multer = require('multer');
 const { createClient } = require('@supabase/supabase-js');
 
+// 1. MAI ÎNTÂI INIȚIALIZĂM 'app'
+const app = express();
+
+// 2. SETĂM FOLDERUL PENTRU FIȘIERE HTML
+app.use(express.static('public'));
+
+// 3. CONFIGURĂM SUPABASE ȘI MULTER
+
 // Conectarea la Supabase Storage
 const supabaseUrl = 'https://pmrjoxyavyveakenzzvw.supabase.co'; 
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcmpveHlhdnl2ZWFrZW56enZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDY4OTUsImV4cCI6MjEwODQyMjg5NX0.qacxygJK0iSbhVo449Wq_Kn9Ter8ilFDedzT8ikqGZA'; 
@@ -53,11 +61,6 @@ app.post('/api/incarca', upload.single('fisier_pdf'), async (req, res) => {
         res.status(500).send('Eroare la încărcarea fișierului pe server.');
     }
 });
-
-const app = express();
-
-// Îi spunem serverului să folosească folderul public pentru fișiere statice (HTML)
-app.use(express.static('public')); 
 
 // ... restul codului rămâne neschimbat ...
 
