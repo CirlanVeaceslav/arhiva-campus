@@ -63,13 +63,6 @@
                 mesajEl.innerText = '❌ Eroare de rețea!';
             }
         });
-    if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('PWA activat cu succes!'))
-        .catch(err => console.error('Eroare PWA:', err));
-    });
-  }
     </script>
 </body>
 </html>
