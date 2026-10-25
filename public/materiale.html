@@ -10,7 +10,7 @@
         .inapoi { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #3498db; font-weight: bold; }
         
         .filtre-container { background-color: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; }
-        .grup-filtru { display: flex; flex-direction: column; flex: 1; min-width: 150px; }
+        .grup-filtru { display: flex; flex-direction: column; flex: 1; min-width: 130px; }
         .grup-filtru label { font-size: 13px; font-weight: bold; color: #4a5568; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
         .grup-filtru select { padding: 10px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 14px; outline: none; cursor: pointer; background-color: #f8fafc; }
         
@@ -35,10 +35,10 @@
         </div>
         <div class="grup-filtru">
             <label>Anul:</label>
-            <select id="filtru-an"><option value="toate">Toți anii</option></select>
+            <select id="filtru-an"><option value="toate">Toți</option></select>
         </div>
         <div class="grup-filtru">
-            <label>Semestrul:</label>
+            <label>Semestru:</label>
             <select id="filtru-semestru"><option value="toate">Toate</option></select>
         </div>
         <div class="grup-filtru">
@@ -48,6 +48,10 @@
         <div class="grup-filtru">
             <label>Tip:</label>
             <select id="filtru-tip"><option value="toate">Toate</option></select>
+        </div>
+        <div class="grup-filtru">
+            <label>An Univ.:</label>
+            <select id="filtru-an-univ"><option value="toate">Toți</option></select>
         </div>
     </div>
 
@@ -74,12 +78,12 @@
                 { id: 'filtru-an', cheie: 'anul' },
                 { id: 'filtru-semestru', cheie: 'semestru' },
                 { id: 'filtru-materie', cheie: 'materia' },
-                { id: 'filtru-tip', cheie: 'tip_material' }
+                { id: 'filtru-tip', cheie: 'tip_material' },
+                { id: 'filtru-an-univ', cheie: 'an_universitar' }
             ];
 
             filtre.forEach(filtru => {
                 const selectElement = document.getElementById(filtru.id);
-                // Extragem valorile unice, eliminăm câmpurile goale și sortăm automat
                 const valoriUnice = [...new Set(materiale.map(m => m[filtru.cheie]).filter(Boolean))].sort();
                 
                 valoriUnice.forEach(valoare => {
@@ -96,6 +100,7 @@
             const semestruSelectat = document.getElementById('filtru-semestru').value;
             const materieSelectata = document.getElementById('filtru-materie').value;
             const tipSelectat = document.getElementById('filtru-tip').value;
+            const anUnivSelectat = document.getElementById('filtru-an-univ').value;
 
             const materialeFiltrate = toateMaterialele.filter(item => {
                 const c1 = cicluSelectat === 'toate' || String(item.ciclu) === cicluSelectat;
@@ -103,8 +108,9 @@
                 const c3 = semestruSelectat === 'toate' || String(item.semestru) === semestruSelectat;
                 const c4 = materieSelectata === 'toate' || String(item.materia) === materieSelectata;
                 const c5 = tipSelectat === 'toate' || String(item.tip_material) === tipSelectat;
+                const c6 = anUnivSelectat === 'toate' || String(item.an_universitar) === anUnivSelectat;
                 
-                return c1 && c2 && c3 && c4 && c5;
+                return c1 && c2 && c3 && c4 && c5 && c6;
             });
 
             afiseazaMateriale(materialeFiltrate);
@@ -129,6 +135,7 @@
                             <span class="tag">${item.ciclu || 'Nespecificat'}</span>
                             <span class="tag">Anul ${item.anul || '-'}</span>
                             <span class="tag">${item.semestru || 'Nespecificat'}</span>
+                            <span class="tag">${item.an_universitar || 'An curent'}</span>
                         </p>
                         <p>Materia: <strong>${item.materia || '-'}</strong> | Tip: ${item.tip_material || 'Nespecificat'}</p>
                     </div>
