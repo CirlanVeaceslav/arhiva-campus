@@ -7,7 +7,12 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; max-width: 950px; margin: auto; background-color: #f8f9fa; }
         h1 { color: #1a2b4c; margin-bottom: 25px; }
-        .inapoi { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #3498db; font-weight: bold; }
+        
+        /* Zona de butoane de sus */
+        .header-sus { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .inapoi { display: inline-block; text-decoration: none; color: #3498db; font-weight: bold; }
+        .buton-adauga { background-color: #d69e2e; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s; font-size: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .buton-adauga:hover { background-color: #b7791f; transform: translateY(-2px); }
         
         .filtre-container { background-color: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; }
         .grup-filtru { display: flex; flex-direction: column; flex: 1; min-width: 130px; }
@@ -25,7 +30,11 @@
     </style>
 </head>
 <body>
-    <a href="/" class="inapoi">← Înapoi la Meniu</a>
+    <div class="header-sus">
+        <a href="/" class="inapoi">← Înapoi la Meniu</a>
+        <a href="/incarca.html" class="buton-adauga">➕ Încarcă Material</a>
+    </div>
+    
     <h1>📚 Arhiva Materiale</h1>
     
     <div class="filtre-container">
