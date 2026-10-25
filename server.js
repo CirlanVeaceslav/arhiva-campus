@@ -14,7 +14,7 @@ app.use(express.static('public'));
 
 // Conectarea la Supabase Storage
 const supabaseUrl = 'https://pmrjoxyavyveakenzzvw.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcmpveHlhdnl2ZWFrZW56enZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDY4OTUsImV4cCI6MjEwODQyMjg5NX0.qacxygJK0iSbhVo449Wq_Kn9Ter8ilFDedzT8ikqGZA'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtcmpveHlhdnl2ZWFrZW56enZ3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5Mjg0Njg5NSwiZXhwIjoyMTA4NDIyODk1fQ.malsCPHaCOby1YiLRM-K71Db9oCbUw95dGlcLBO21Wg'; 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Configurare Multer pentru a citi fișierul din memorie
