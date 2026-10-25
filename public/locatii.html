@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arhiva Campus UAIC</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a2b4c">
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
         .locatie { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #f9f9f9; }
@@ -45,6 +47,13 @@
 
         // Apelăm funcția când se deschide pagina
         incarcaLocatii();
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('PWA activat cu succes!'))
+        .catch(err => console.error('Eroare PWA:', err));
+    });
+  }
     </script>
 </body>
 </html>

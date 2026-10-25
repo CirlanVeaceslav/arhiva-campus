@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arhiva Materiale - UAIC</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a2b4c">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; max-width: 950px; margin: auto; background-color: #f8f9fa; }
         h1 { color: #1a2b4c; margin-bottom: 25px; }
@@ -155,6 +157,13 @@
         }
 
         incarcaDate();
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('PWA activat cu succes!'))
+        .catch(err => console.error('Eroare PWA:', err));
+    });
+  }
     </script>
 </body>
 </html>

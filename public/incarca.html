@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Încărcare Materiale</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a2b4c">
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f8f9fa; padding: 20px; display: flex; justify-content: center; }
         .form-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
@@ -61,6 +63,13 @@
                 mesajEl.innerText = '❌ Eroare de rețea!';
             }
         });
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('PWA activat cu succes!'))
+        .catch(err => console.error('Eroare PWA:', err));
+    });
+  }
     </script>
 </body>
 </html>
