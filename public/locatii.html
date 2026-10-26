@@ -10,8 +10,8 @@
         body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
         .locatie { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #f9f9f9; }
         .nume { font-size: 18px; font-weight: bold; color: #0056b3; }
-        .detalii { color: #555; font-size: 14px; margin-top: 5px; }
-        .scor { color: #00ff00;}
+        .detalii { color: #555; font-size: 14px; margin-top: 5px; display: inline-block;}
+        .scor { color: #00ff00; display: inline-block;}
     </style>
 </head>
 <body>
@@ -36,7 +36,7 @@
                     div.className = 'locatie';
                     div.innerHTML = `
                         <div class="nume">${locatie.nume}</div>
-                        <div class="detalii">Categorie: ${locatie.categorie}}/10</div><div class="detalii"> | Scor: ${locatie.scor}</div>
+                        <div class="detalii">Categorie: ${locatie.categorie}/10</div><div class="scor">Scor: ${locatie.scor}</div>
                     `;
                     container.appendChild(div);
                 });
